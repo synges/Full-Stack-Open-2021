@@ -6,20 +6,27 @@ const Button = ({handleClick, text}) => (
   </button>
 )
 
+const Statistic = ({text,value})  => (
+  <>
+  {text} {value}
+  </>
+)
+
 
 const Statistics = ({good, neutral, bad, all}) => (
   <div>
-    good {good}
+    <Statistic text="good" value ={good} />
     <br/>
-    neutral {neutral}
+    <Statistic text="neutral" value ={neutral} />
     <br/>
-    bad {bad}
+
+    <Statistic text="bad" value ={bad} />
     <br/>
-    all {all}
+    <Statistic text="all" value ={all} />
     <br/>
-    average {(good-bad)/all}
+    <Statistic text="average" value ={(good-bad)/all} />
     <br/>
-    positive {good/all*100} %
+    <Statistic text="positive" value ={good/all*100} /> %
   </div>
 )
 
@@ -41,11 +48,13 @@ const App = () => {
       case "netural":
         setNeutral(neutral+1)
         break;
+      default:
+        break;  
     }
     setAll(all+1)
   }
 
-  if(all == 0){
+  if(all === 0){
     return (
       <div>
         <h1>give feedback</h1>
