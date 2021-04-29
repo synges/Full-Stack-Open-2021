@@ -1,6 +1,8 @@
 import React from 'react'
 
-const Display = ({countriesToShow}) =>{
+import Country from './Country'
+
+const Display = ({countriesToShow, handleCountrychoice}) =>{
 
     if(countriesToShow.length > 10){
         return (
@@ -10,25 +12,17 @@ const Display = ({countriesToShow}) =>{
         )
     } else if (countriesToShow.length === 1){
         return (
-            <div>
-                <h2>{countriesToShow[0].name}</h2>
-                capital {countriesToShow[0].capital}
-                <br/>
-                population {countriesToShow[0].population}
-
-                <h3>languages</h3>
-                <ul>
-                    {countriesToShow[0].languages.map( language => <li key={language.iso639_1}>{language.name}</li>)}
-                </ul>
-
-                <img width="100 px" src={countriesToShow[0].flag} alt={countriesToShow[0].name} />    
-            </div>
+            <Country country={countriesToShow[0]}/>
         )
     } else {
         return (
             <div>
                 <ul>
-                    {countriesToShow.map( country => <li key={country.alpha3Code}>{country.name}</li>)}
+                    {countriesToShow.map( country => 
+                        <li key={country.alpha3Code}>{country.name}
+                            <button value={country.alpha3Code} onClick={handleCountrychoice}>show</button>
+                        </li>
+                    )}
                 </ul>
             </div>
         )
