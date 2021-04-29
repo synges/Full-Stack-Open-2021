@@ -18,8 +18,6 @@ const App = () => {
       setcountriesToShow(response.data)})
   }, [])
 
-
-  
   const handleFilterChange = event => {
     setcountryFilter(event.target.value)
     setcountriesToShow(countries.filter( country => country.name.toLowerCase().includes(countryFilter.toLowerCase()) ))
@@ -29,8 +27,6 @@ const App = () => {
     setcountriesToShow(countries.filter( country => country.alpha3Code === event.target.value))
     setcountryFilter('')
   }
-
-
 
   return (
     <div>
