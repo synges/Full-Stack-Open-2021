@@ -40,7 +40,10 @@ const App = () => {
 								person.id !== foundPerson.id ? person : returnedPerson
 							)
 						)
-						setNotification(`Changed ${newName} number to ${newNumber}`)
+						setNotification({
+							message: `Changed ${newName} number to ${newNumber}`,
+							error: false,
+						})
 						setTimeout(() => {
 							setNotification(null)
 						}, 5000)
@@ -52,7 +55,11 @@ const App = () => {
 			const newPerson = { name: newName, number: newNumber }
 			personService.create(newPerson).then((returnedPerson) => {
 				setPersons(persons.concat(returnedPerson))
-				setNotification(`Added ${returnedPerson.name}`)
+				setNotification(``)
+				setNotification({
+					message: `Added ${returnedPerson.name}`,
+					error: false,
+				})
 				setTimeout(() => {
 					setNotification(null)
 				}, 5000)
@@ -64,9 +71,20 @@ const App = () => {
 
 	const deletePerson = (deletedPerson) => {
 		if (window.confirm(`Delete ${deletedPerson.name}`)) {
-			personService.deletePerson(deletedPerson).then((status) => {
-				setPersons(persons.filter((person) => person.id !== deletedPerson.id))
-			})
+			personService
+				.deletePerson(deletedPerson)
+				.then((status) => {
+					setPersons(persons.filter((person) => person.id !== deletedPerson.id))
+				})
+				.catch((error) => {
+					setNotification({
+						message: `${deletedPerson.name} was already been removed from the server`,
+						error: true,
+					})
+					setTimeout(() => {
+						setNotification(null)
+					}, 5000)
+				})
 		}
 	}
 
@@ -91,7 +109,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<Notification message={notification} />
+			<Notification notification={notification} />
 			<Filter nameFilter={nameFilter} handleFilterChange={handleFilterChange} />
 			<h3>add a new</h3>
 			<Form

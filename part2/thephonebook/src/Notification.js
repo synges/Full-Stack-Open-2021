@@ -1,11 +1,15 @@
 import React from 'react'
 
-const Notification = ({ message }) => {
-	if (message === null) {
+const Notification = ({ notification }) => {
+	if (notification === null) {
 		return null
 	}
 
-	return <div style={notificationStyle}>{message}</div>
+	return (
+		<div style={notification.error ? errorStyle : notificationStyle}>
+			{notification.message}
+		</div>
+	)
 }
 
 const notificationStyle = {
@@ -16,6 +20,11 @@ const notificationStyle = {
 	borderRadius: 4,
 	padding: 9,
 	marginBottom: 9,
+}
+
+const errorStyle = {
+	...notificationStyle,
+	color: 'red',
 }
 
 export default Notification
