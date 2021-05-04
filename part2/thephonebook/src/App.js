@@ -37,12 +37,11 @@ const App = () => {
 	};
 
 	const deletePerson = (deletedPerson) => {
-		personService.deletePerson(deletedPerson).then((status) => {
-			if (status === 200) {
-				console.log(persons.filter((person) => person.id !== deletedPerson.id));
+		if (window.confirm(`Delete ${deletedPerson.name}`)) {
+			personService.deletePerson(deletedPerson).then((status) => {
 				setPersons(persons.filter((person) => person.id !== deletedPerson.id));
-			}
-		});
+			});
+		}
 	};
 
 	const handleNameChange = (event) => {
