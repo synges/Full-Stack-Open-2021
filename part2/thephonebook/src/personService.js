@@ -16,5 +16,9 @@ const deletePerson = (person) => {
 	return request.then((response) => response.status);
 };
 
+const update = (person, updatedPerson) => {
+	const request = axios.put(`${baseUrl}/${person.id}`, updatedPerson);
+	return request.then((response) => response.data);
+};
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, deletePerson };
+export default { getAll, create, deletePerson, update };
