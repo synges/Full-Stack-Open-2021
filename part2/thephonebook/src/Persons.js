@@ -1,17 +1,22 @@
-import React from 'react'
+import React from 'react';
 
-const Person = ({person}) => {
-    return (
-        <h3>{person.name} {person.number}</h3>
-    )
-}
+const Person = ({ person, deletePerson }) => {
+	return (
+		<h3>
+			{person.name} {person.number}
+			<button onClick={() => deletePerson(person)}>delete </button>
+		</h3>
+	);
+};
 
-const Persons = ({personsToShow}) => {
-    return (
-        <>
-        {personsToShow.map(person => <Person key={person.name} person={person} />)}
-        </>
-    )
-}
+const Persons = ({ personsToShow, deletePerson }) => {
+	return (
+		<>
+			{personsToShow.map((person) => (
+				<Person key={person.name} person={person} deletePerson={deletePerson} />
+			))}
+		</>
+	);
+};
 
-export default Persons
+export default Persons;
