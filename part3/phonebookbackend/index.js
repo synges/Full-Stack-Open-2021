@@ -56,6 +56,17 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
 	const person = request.body
+
+	if (!person.name || !person.number) {
+		response.status(400).send({
+			error: 'Missiang either Name or number',
+		})
+	}
+	if (persons.find((item) => item.name === person.name)) {
+		response.status(400).send({
+			error: 'That Person already exists',
+		})
+	}
 	person.id = Math.floor(Math.random() * 100) + 4
 
 	persons = persons.concat(person)
