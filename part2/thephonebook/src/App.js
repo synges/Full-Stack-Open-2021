@@ -44,12 +44,18 @@ const App = () => {
 							message: `Changed ${newName} number to ${newNumber}`,
 							error: false,
 						});
-						setTimeout(() => {
-							setNotification(null);
-						}, 5000);
-						setNewName('');
-						setNewNumber('');
+					})
+					.catch((errorMessage) => {
+						setNotification({
+							message: `${errorMessage.response.data.error}`,
+							error: true,
+						});
 					});
+				setTimeout(() => {
+					setNotification(null);
+				}, 5000);
+				setNewName('');
+				setNewNumber('');
 			}
 		} else {
 			const newPerson = { name: newName, number: newNumber };
