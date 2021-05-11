@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
-import personService from './personService'
-import Filter from './Filter'
-import Form from './Form'
-import Persons from './Persons'
-import Notification from './Notification'
+import personService from './personService';
+import Filter from './Filter';
+import Form from './Form';
+import Persons from './Persons';
+import Notification from './Notification';
 
 const App = () => {
-	const [persons, setPersons] = useState([])
-	const [newName, setNewName] = useState('')
-	const [newNumber, setNewNumber] = useState('')
-	const [nameFilter, setNameFilter] = useState('')
-	const [notification, setNotification] = useState(null)
+	const [persons, setPersons] = useState([]);
+	const [newName, setNewName] = useState('');
+	const [newNumber, setNewNumber] = useState('');
+	const [nameFilter, setNameFilter] = useState('');
+	const [notification, setNotification] = useState(null);
 
 	useEffect(() => {
 		personService.getAll().then((persons) => {
-			setPersons(persons)
-		})
-	}, [])
+			setPersons(persons);
+		});
+	}, []);
 
 	const addPerson = (event) => {
-		event.preventDefault()
+		event.preventDefault();
 
 		const foundPerson = persons.find(
 			(person) => person.name.toLowerCase() === newName.toLowerCase()
-		)
+		);
 
 		if (foundPerson) {
 			if (
@@ -39,72 +39,82 @@ const App = () => {
 							persons.map((person) =>
 								person.id !== foundPerson.id ? person : returnedPerson
 							)
-						)
+						);
 						setNotification({
 							message: `Changed ${newName} number to ${newNumber}`,
 							error: false,
-						})
+						});
 						setTimeout(() => {
-							setNotification(null)
-						}, 5000)
-						setNewName('')
-						setNewNumber('')
-					})
+							setNotification(null);
+						}, 5000);
+						setNewName('');
+						setNewNumber('');
+					});
 			}
 		} else {
-			const newPerson = { name: newName, number: newNumber }
-			personService.create(newPerson).then((returnedPerson) => {
-				setPersons(persons.concat(returnedPerson))
-				setNotification(``)
-				setNotification({
-					message: `Added ${returnedPerson.name}`,
-					error: false,
+			const newPerson = { name: newName, number: newNumber };
+			personService
+				.create(newPerson)
+				.then((returnedPerson) => {
+					setPersons(persons.concat(returnedPerson));
+					setNotification(``);
+					setNotification({
+						message: `Added ${returnedPerson.name}`,
+						error: false,
+					});
 				})
-				setTimeout(() => {
-					setNotification(null)
-				}, 5000)
-				setNewName('')
-				setNewNumber('')
-			})
+				.catch((errorMessage) => {
+					setNotification({
+						message: `${errorMessage.response.data.error}`,
+						error: true,
+					});
+				});
+			setTimeout(() => {
+				setNotification(null);
+			}, 5000);
+			setNewName('');
+			setNewNumber('');
 		}
-	}
+	};
 
 	const deletePerson = (deletedPerson) => {
 		if (window.confirm(`Delete ${deletedPerson.name}`)) {
 			personService
 				.deletePerson(deletedPerson)
 				.then((status) => {
-					setPersons(persons.filter((person) => person.id !== deletedPerson.id))
+					setPersons(
+						persons.filter((person) => person.id !== deletedPerson.id)
+					);
 				})
 				.catch((error) => {
 					setNotification({
 						message: `${deletedPerson.name} was already been removed from the server`,
 						error: true,
-					})
+					});
 					setTimeout(() => {
-						setNotification(null)
-					}, 5000)
-				})
+						setNotification(null);
+					}, 5000);
+				});
 		}
-	}
+	};
 
 	const handleNameChange = (event) => {
-		setNewName(event.target.value)
-	}
+		setNewName(event.target.value);
+	};
 
 	const handleNumberChange = (event) => {
-		setNewNumber(event.target.value)
-	}
+		setNewNumber(event.target.value);
+	};
 
 	const handleFilterChange = (event) => {
-		setNameFilter(event.target.value)
-	}
+		setNameFilter(event.target.value);
+	};
 
 	const personsToShow = nameFilter
 		? persons.filter((person) =>
 				person.name.toLowerCase().includes(nameFilter.toLowerCase())
 		  )
-		: persons
+		: persons;
 
 	return (
 		<div>
@@ -122,7 +132,7 @@ const App = () => {
 			<h3>Numbers</h3>
 			<Persons personsToShow={personsToShow} deletePerson={deletePerson} />
 		</div>
-	)
-}
+	);
+};
 
-export default App
+export default App;
