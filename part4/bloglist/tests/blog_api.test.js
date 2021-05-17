@@ -75,6 +75,12 @@ test('notes are returned as json and correct count', async () => {
 	expect(response.body).toHaveLength(blogs.length);
 });
 
+test('unique identifier is called id', async () => {
+	const response = await api.get('/api/blogs');
+
+	expect(response.body[0].id).toBeDefined();
+});
+
 afterAll(() => {
 	mongoose.connection.close();
 });
