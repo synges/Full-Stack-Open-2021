@@ -81,6 +81,30 @@ test('unique identifier is called id', async () => {
 	expect(response.body[0].id).toBeDefined();
 });
 
+test('creating a blog post works', async () => {
+	const newBlog = {
+		title: 'new Blog',
+		author: 'Ahmed Aziz',
+		url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+		likes: 15,
+	};
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/);
+
+	const response = await api
+		.get('/api/blogs')
+		.expect(200)
+		.expect('Content-Type', /application\/json/);
+
+	const title = response.body.map((item) => item.title);
+
+	expect(response.body).toHaveLength(blogs.length + 1);
+	expect(title).toContain('new Blog');
+});
+
 afterAll(() => {
 	mongoose.connection.close();
 });
