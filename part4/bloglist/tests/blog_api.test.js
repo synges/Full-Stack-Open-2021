@@ -124,8 +124,25 @@ test('likes property defaults to zero if missing from request', async () => {
 
 	const newEntry = response.body.find((item) => item.title === 'new Blog');
 
-	expect(response.body).toHaveLength(blogs.length + 1);
 	expect(newEntry.likes).toBe(0);
+});
+
+test('title and url properties are missing', async () => {
+	const newBlogNoTitle = {
+		author: 'Ahmed Aziz',
+		url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+		likes: 15,
+	};
+
+	await api.post('/api/blogs').send(newBlogNoTitle).expect(400);
+
+	const newBlogNoUrl = {
+		title: 'new Blog',
+		author: 'Ahmed Aziz',
+		likes: 15,
+	};
+
+	await api.post('/api/blogs').send(newBlogNoUrl).expect(400);
 });
 
 afterAll(() => {
