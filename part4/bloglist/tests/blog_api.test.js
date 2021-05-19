@@ -1,4 +1,3 @@
-const { TestScheduler } = require('@jest/core');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
@@ -61,7 +60,7 @@ beforeEach(async () => {
 	await Blog.deleteMany({});
 
 	for (const blog of blogs) {
-		let blogObject = new Blog(blog);
+		const blogObject = new Blog(blog);
 		await blogObject.save();
 	}
 });
@@ -104,7 +103,6 @@ test('creating a blog post works', async () => {
 	expect(response.body).toHaveLength(blogs.length + 1);
 	expect(titles).toContain('new Blog');
 });
-
 test('likes property defaults to zero if missing from request', async () => {
 	const newBlog = {
 		title: 'new Blog',
