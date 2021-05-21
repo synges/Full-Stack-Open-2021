@@ -7,7 +7,7 @@ usersRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
-usersRouter.post('/', async (request, response, next) => {
+usersRouter.post('/', async (request, response) => {
   const { body } = request
   if (!body.password || body.password.length < 3) {
     return response.status(400).json({
@@ -23,12 +23,8 @@ usersRouter.post('/', async (request, response, next) => {
     passwordHash,
   })
   console.log(user)
-  try {
-    const result = await user.save()
-    response.status(201).json(result)
-  } catch (error) {
-    next(error)
-  }
+  const result = await user.save()
+  response.status(201).json(result)
 })
 
 module.exports = usersRouter
