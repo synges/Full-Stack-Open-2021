@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -8,15 +9,30 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
 
+  const addBlog = async (createdBlog) => {
+    try {
+      const newBlog = await blogService.create(createdBlog)
+      setBlogs(blogs.concat(newBlog))
+      setNotification({
+        message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+        error: false,
+      })
+    } catch (exception) {
+      setNotification({
+        message: `failed to create new blog`,
+        error: true,
+      })
+    }
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
-
     try {
       const user = await loginService.login({ username, password })
       blogService.setToken(user.token)
@@ -34,6 +50,7 @@ const App = () => {
       setNotification(null)
     }, 5000)
   }
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setNotification({
@@ -41,29 +58,6 @@ const App = () => {
       error: false,
     })
     setUser(null)
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
-  }
-
-  const handleCreate = async (event) => {
-    event.preventDefault()
-    try {
-      const newBlog = await blogService.create({ title, author, url })
-      setBlogs(blogs.concat(newBlog))
-      setNotification({
-        message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
-        error: false,
-      })
-      setAuthor('')
-      setTitle('')
-      setUrl('')
-    } catch (exception) {
-      setNotification({
-        message: `failed to create new blog`,
-        error: true,
-      })
-    }
     setTimeout(() => {
       setNotification(null)
     }, 5000)
@@ -117,37 +111,7 @@ const App = () => {
       <Notification notification={notification} />
       {user.name} logged in
       <button onClick={handleLogout}>logout</button>
-      <h2>create new</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-          title:
-          <input
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            type="text"
-            value={url}
-            name="Url"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
+      <BlogForm createBlog={addBlog} />
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
