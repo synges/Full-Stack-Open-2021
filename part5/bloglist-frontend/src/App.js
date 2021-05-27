@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -27,6 +28,30 @@ const App = () => {
     } catch (exception) {
       setNotification({
         message: `failed to create new blog`,
+        error: true,
+      })
+    }
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
+  const addLike = async (likedBlog) => {
+    try {
+      const updatedBlog = {
+        user: likedBlog.user._id.toString(),
+        likes: likedBlog.likes + 1,
+        author: likedBlog.author,
+        title: likedBlog.title,
+        url: likedBlog.url,
+      }
+      const response = await blogService.update(likedBlog, updatedBlog)
+      setBlogs(
+        blogs.map((blog) => (blog.id !== likedBlog.id ? blog : response))
+      )
+    } catch (exception) {
+      setNotification({
+        message: `failed to like the blog`,
         error: true,
       })
     }
@@ -119,7 +144,7 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} addLike={addLike} />
       ))}
     </div>
   )
