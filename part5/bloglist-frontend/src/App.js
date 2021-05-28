@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -39,7 +38,7 @@ const App = () => {
   const addLike = async (likedBlog) => {
     try {
       const updatedBlog = {
-        user: likedBlog.user._id.toString(),
+        user: likedBlog.user.id,
         likes: likedBlog.likes + 1,
         author: likedBlog.author,
         title: likedBlog.title,
