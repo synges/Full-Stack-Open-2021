@@ -26,7 +26,7 @@ const App = () => {
       })
     } catch (exception) {
       setNotification({
-        message: `failed to create new blog`,
+        message: 'failed to create new blog',
         error: true,
       })
     }
@@ -52,7 +52,7 @@ const App = () => {
       )
     } catch (exception) {
       setNotification({
-        message: `failed to like the blog`,
+        message: 'failed to like the blog',
         error: true,
       })
     }
@@ -67,7 +67,7 @@ const App = () => {
       setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
     } catch (exception) {
       setNotification({
-        message: `failed to delete the blog`,
+        message: 'failed to delete the blog',
         error: true,
       })
     }
