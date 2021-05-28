@@ -61,6 +61,21 @@ const App = () => {
     }, 5000)
   }
 
+  const deleteBlog = async (deletedBlog) => {
+    try {
+      await blogService.deleteBlog(deletedBlog)
+      setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
+    } catch (exception) {
+      setNotification({
+        message: `failed to delete the blog`,
+        error: true,
+      })
+    }
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -147,7 +162,13 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} addLike={addLike} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          addLike={addLike}
+          deleteBlog={deleteBlog}
+          loggedUser={user}
+        />
       ))}
     </div>
   )
