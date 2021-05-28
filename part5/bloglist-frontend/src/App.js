@@ -46,7 +46,9 @@ const App = () => {
       }
       const response = await blogService.update(likedBlog, updatedBlog)
       setBlogs(
-        blogs.map((blog) => (blog.id !== likedBlog.id ? blog : response))
+        blogs
+          .map((blog) => (blog.id !== likedBlog.id ? blog : response))
+          .sort((a, b) => a.likes - b.likes)
       )
     } catch (exception) {
       setNotification({
@@ -101,7 +103,9 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService
+      .getAll()
+      .then((blogs) => setBlogs(blogs.sort((a, b) => a.likes - b.likes)))
   }, [user])
 
   if (user === null) {
