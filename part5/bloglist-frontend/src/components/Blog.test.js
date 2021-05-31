@@ -5,7 +5,7 @@ import Blog from './Blog'
 
 describe('<Blog />', () => {
   let component
-
+  let mockHandler
   beforeEach(() => {
     const blog = {
       title: 'Component testing is done with react-testing-library',
@@ -17,8 +17,11 @@ describe('<Blog />', () => {
     const loggedUser = {
       username: 'test username',
     }
+    mockHandler = jest.fn()
 
-    component = render(<Blog blog={blog} loggedUser={loggedUser} />)
+    component = render(
+      <Blog blog={blog} loggedUser={loggedUser} addLike={mockHandler} />
+    )
   })
 
   test('renders content with basic info', () => {
@@ -42,5 +45,15 @@ describe('<Blog />', () => {
     fireEvent.click(button)
 
     expect(component.container).toHaveTextContent('www.expample.com')
+  })
+
+  test('clicking the like button fires the event', () => {
+    const viewButton = component.getByText('view')
+    fireEvent.click(viewButton)
+
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })
