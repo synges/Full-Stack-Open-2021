@@ -47,5 +47,15 @@ describe('Blog app', function () {
       cy.contains('create').click()
       cy.contains('test author')
     })
+
+    it.only('Ab log can be liked', function () {
+      cy.contains('New Blog').click()
+      cy.get('#author').type('test author')
+      cy.get('#title').type('test title')
+      cy.get('#url').type('test url')
+      cy.contains('create').click()
+      cy.contains('view').click()
+      cy.contains('like').click()
+    })
   })
 })
