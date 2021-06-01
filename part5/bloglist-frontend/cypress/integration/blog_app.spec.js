@@ -33,4 +33,19 @@ describe('Blog app', function () {
       cy.contains('wrong username or password')
     })
   })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'synges', password: '12345' })
+    })
+
+    it.only('A blog can be created', function () {
+      cy.contains('New Blog').click()
+      cy.get('#author').type('test author')
+      cy.get('#title').type('test title')
+      cy.get('#url').type('test url')
+      cy.contains('create').click()
+      cy.contains('test author')
+    })
+  })
 })
