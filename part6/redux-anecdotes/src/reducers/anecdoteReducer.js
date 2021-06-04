@@ -1,9 +1,12 @@
 import anecdoteService from '../services/anecdoteService'
 
-const voteAnecdote = (id) => {
-  return {
-    type: 'VOTE',
-    data: { id },
+const voteAnecdote = (anecdote) => {
+  return async (dispatch) => {
+    const updatedAnecdote = await anecdoteService.increaseVote(anecdote)
+    dispatch({
+      type: 'VOTE',
+      data: updatedAnecdote,
+    })
   }
 }
 
@@ -44,7 +47,7 @@ const anecdoteReducer = (state = [], action) => {
       return [...state, action.data].sort((a, b) => b.votes - a.votes)
     }
     case 'INIT_ANECDOTES': {
-      return action.data
+      return action.data.sort((a, b) => b.votes - a.votes)
     }
     default:
       return state

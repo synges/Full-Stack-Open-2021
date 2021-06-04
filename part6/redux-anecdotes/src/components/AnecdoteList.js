@@ -12,9 +12,9 @@ const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
   const vote = (anecdote) => {
-    dispatch(voteAnecdote(anecdote.id))
+    dispatch(voteAnecdote(anecdote))
     dispatch(setMessage(`you voted '${anecdote.content}'`))
-    // setTimeout(() => dispatch(clearMessage), 5000)
+    setTimeout(() => dispatch(clearMessage()), 5000)
   }
 
   return (
