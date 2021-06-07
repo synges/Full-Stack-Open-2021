@@ -12,7 +12,7 @@ const Notification = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    notification: state.message,
+    notification: state.notification.message,
   }
 }
 
