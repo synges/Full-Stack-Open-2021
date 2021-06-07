@@ -1,8 +1,8 @@
-import { combineReducers, createStore, applyMiddleware } from 'redux'
 import anecdoteReducer from './reducers/anecdoteReducer'
-import { composeWithDevTools } from 'redux-devtools-extension'
 import notificationReducer from './reducers/notificationReducer'
 import filterReducer from './reducers/filterReducer'
+import { combineReducers, createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
 const reducer = combineReducers({
