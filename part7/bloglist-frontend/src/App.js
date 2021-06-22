@@ -9,7 +9,12 @@ import {
   setNotification,
   clearNotification,
 } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogsReducer'
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  removeBlog,
+} from './reducers/blogsReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
@@ -37,8 +42,6 @@ const App = () => {
 
   const addBlog = async (createdBlog) => {
     try {
-      // const newBlog = await blogService.create(createdBlog)
-      // setBlogs(blogs.concat(newBlog))
       dispatch(createBlog(createdBlog))
       blogFormRef.current.toggleVisibility()
       displayNotification(
@@ -59,13 +62,7 @@ const App = () => {
         title: likedBlog.title,
         url: likedBlog.url,
       }
-      const response = await blogService.update(likedBlog, updatedBlog)
-      // setBlogs(
-      //   blogs
-      //     .map((blog) => (blog.id !== likedBlog.id ? blog : response))
-      //     .sort((a, b) => a.likes - b.likes)
-      // )
-      console.log(response)
+      dispatch(likeBlog(likedBlog, updatedBlog))
     } catch (exception) {
       displayNotification('failed to like the blog', true)
     }
@@ -73,8 +70,7 @@ const App = () => {
 
   const deleteBlog = async (deletedBlog) => {
     try {
-      await blogService.deleteBlog(deletedBlog)
-      // setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
+      dispatch(removeBlog(deletedBlog))
     } catch (exception) {
       displayNotification('failed to delete the blog', true)
     }
