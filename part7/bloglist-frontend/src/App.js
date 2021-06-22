@@ -5,13 +5,17 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setNotification, clearNotification  } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
+
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notification)
 
   const blogFormRef = useRef()
 
@@ -20,18 +24,18 @@ const App = () => {
       const newBlog = await blogService.create(createdBlog)
       setBlogs(blogs.concat(newBlog))
       blogFormRef.current.toggleVisibility()
-      setNotification({
+      dispatch(setNotification({
         message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
         error: false,
-      })
+      }))
     } catch (exception) {
-      setNotification({
+      dispatch(setNotification({
         message: 'failed to create new blog',
         error: true,
-      })
+      }))
     }
     setTimeout(() => {
-      setNotification(null)
+      dispatch(clearNotification())
     }, 5000)
   }
 
